@@ -1,16 +1,16 @@
-# Bookstore Database Assignment
+# Bookshop RDBMS Assignment
 
-This project demonstrates the setup and management of a PostgreSQL database for a bookstore. The assignment involves creating and manipulating tables, inserting sample data, and performing SQL queries.
+This is a Relational Database Management System's project for a bookshop
 
-## 🚀 Objective
+## 🚀 Goal
 
-The assignment focuses on the following tasks:
+The assignment emphasis on this following tasks:
 
 - Creating tables (`books`, `customers`, `orders`).
 - Inserting sample data into the tables.
 - Performing SQL queries (CRUD operations, JOINs, aggregation, etc.).
 
-## Bonus Section
+## Bonus Section Answer
 
 1.  What is PostgreSQL? <br>
     `Ans:` PostgreSQL হলো একটি ওপেন-সোর্স রিলেশনাল ডেটাবেস ম্যানেজমেন্ট সিস্টেম (RDBMS)।

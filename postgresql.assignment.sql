@@ -11,6 +11,12 @@ CREATE TABLE books(
     published_year INT
 )
 
+INSERT INTO books (title, author, price, stock, published_year) VALUES
+('INFERNO', 'Dan Brown', 10.99, 0, 1960),
+('3am', 'Nic perock', 9.99, 0, 1949),
+('The Alchemist', 'Pawlo coelho', 8.50, 0, 1813),
+('The Name of Prodhan', 'sourav', 12.00, 0, 1925);
+
 -- creating the customers table
 
 CREATE TABLE customers(
@@ -20,11 +26,60 @@ CREATE TABLE customers(
     joined_date DATE NOT NULL DEFAULT CURRENT_DATE
 )
 
+
+
 -- creating the orders table
 CREATE TABLE orders(
     id SERIAL PRIMARY KEY,
     customer_id INTEGER REFERENCES customers(id),
     book_id INTEGER REFERENCES books(id),
     quantity INT NOT NULL CHECK (quantity>0),
-    order_date DATE NOT NULL DEFAULT CURRENT_DATE
+    order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 )
+
+INSERT INTO orders (customer_id,book_id,quantity) VALUES
+(2,1,3)
+
+-- problem:01 (find the books that are out of stock)
+
+SELECT * FROM books WHERE stock=0;
+
+-- problem:02 (find the most expensive book)
+
+SELECT max(price) as expensive_book FROM books
+
+-- problem:03 (find the total number of books ordered by each customer)
+
+SELECT name,count(*) as total_orders FROM orders
+JOIN customers on orders.customer_id=customers.id 
+GROUP BY name
+
+-- problem:04 (calculate the total revenue sold from all orders)
+
+SELECT SUM(o.quantity*b.price) as total_revenue FROM orders as o
+JOIN books as b ON o.book_id=b.id
+
+
+-- problem:05 (who ordered more than 1 book)
+
+SELECT customers.name,count(*) as orders_count FROM orders 
+JOIN customers on orders.customer_id=customers.id 
+GROUP BY customers.name
+
+-- problem:06 (find the avg price of books)
+
+SELECT AVG(price) as avg_book_price FROM books
+
+-- problem:07 (increase book price 10% for all books published before 2000)
+
+UPDATE books SET price=price*1.1 WHERE published_year<2000;
+
+-- problems:08 (delete customer who has not placed any orders)
+
+DELETE FROM customers 
+WHERE id IN (SELECT customers.id FROM orders 
+RIGHT JOIN customers ON orders.customer_id=customers.id
+WHERE orders.customer_id IS NULL)
+
+
+

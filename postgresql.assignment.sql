@@ -1,7 +1,6 @@
 -- Active: 1743933960278@@127.0.0.1@5432@assignment
 
 -- Creating the books table
-
 CREATE TABLE books(
     id SERIAL PRIMARY KEY,
     title VARCHAR(50) NOT NULL,
@@ -11,22 +10,13 @@ CREATE TABLE books(
     published_year INT
 )
 
-INSERT INTO books (title, author, price, stock, published_year) VALUES
-('INFERNO', 'Dan Brown', 10.99, 0, 1960),
-('3am', 'Nic perock', 9.99, 0, 1949),
-('The Alchemist', 'Pawlo coelho', 8.50, 0, 1813),
-('The Name of Prodhan', 'sourav', 12.00, 0, 1925);
-
 -- creating the customers table
-
 CREATE TABLE customers(
     id SERIAL PRIMARY KEY,
     name VARCHAR(50) NOT NULL,
     email VARCHAR(50) NOT NULL UNIQUE,
     joined_date DATE NOT NULL DEFAULT CURRENT_DATE
 )
-
-
 
 -- creating the orders table
 CREATE TABLE orders(
@@ -37,44 +27,59 @@ CREATE TABLE orders(
     order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 )
 
+-- inserting data into books table
+INSERT INTO books (title, author, price, stock, published_year) VALUES
+('INFERNO', 'Dan Brown', 10.99, 0, 1960),
+('3am', 'Nic perock', 9.99, 0, 1949),
+('The Alchemist', 'Pawlo coelho', 8.50, 0, 1813),
+('The Name of Prodhan', 'sourav', 12.00, 0, 1925);
+
+-- inserting data into customers table
+INSERT INTO customers (name,email) VALUES('Mitu','mitu@gmail.com')
+
+-- inserting data into orders table
 INSERT INTO orders (customer_id,book_id,quantity) VALUES
 (2,1,3)
 
--- problem:01 (find the books that are out of stock)
+
+
+-- solving problems
+
+-- problem:1️⃣ (find the books that are out of stock)
 
 SELECT * FROM books WHERE stock=0;
 
--- problem:02 (find the most expensive book)
+-- problem:2️⃣ (find the most expensive book)
 
 SELECT max(price) as expensive_book FROM books
 
--- problem:03 (find the total number of books ordered by each customer)
+-- problem:3️⃣ (find the total number of books ordered by each customer)
 
 SELECT name,count(*) as total_orders FROM orders
 JOIN customers on orders.customer_id=customers.id 
 GROUP BY name
 
--- problem:04 (calculate the total revenue sold from all orders)
+-- problem:4️⃣ (calculate the total revenue sold from all orders)
 
 SELECT SUM(o.quantity*b.price) as total_revenue FROM orders as o
 JOIN books as b ON o.book_id=b.id
 
 
--- problem:05 (who ordered more than 1 book)
+-- problem:5️⃣ (who ordered more than 1 book)
 
 SELECT customers.name,count(*) as orders_count FROM orders 
 JOIN customers on orders.customer_id=customers.id 
 GROUP BY customers.name
 
--- problem:06 (find the avg price of books)
+-- problem:6️⃣ (find the avg price of books)
 
 SELECT AVG(price) as avg_book_price FROM books
 
--- problem:07 (increase book price 10% for all books published before 2000)
+-- problem:7️⃣ (increase book price 10% for all books published before 2000)
 
 UPDATE books SET price=price*1.1 WHERE published_year<2000;
 
--- problems:08 (delete customer who has not placed any orders)
+-- problem:8️⃣ (delete customer who has not placed any orders)
 
 DELETE FROM customers 
 WHERE id IN (SELECT customers.id FROM orders 
